@@ -1,0 +1,5 @@
+Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
+"C:/Users/Jeffrey/Documents/MonoGame Games/NOTGalaga/NOTGalaga/Content/Enemy Shooter (2).png","C:/Users/Jeffrey/Documents/MonoGame Games/NOTGalaga/NOTGalaga/Content/bin/DesktopGL/Content/Enemy Shooter.xnb","TextureProcessor","Texture2DContent",2514,65621,2.570794
+"C:/Users/Jeffrey/Documents/MonoGame Games/NOTGalaga/NOTGalaga/Content/Projectile Laser.png","C:/Users/Jeffrey/Documents/MonoGame Games/NOTGalaga/NOTGalaga/Content/bin/DesktopGL/Content/Projectile Laser.xnb","TextureProcessor","Texture2DContent",213,4693,1.435099
+"C:/Users/Jeffrey/Documents/MonoGame Games/NOTGalaga/NOTGalaga/Content/Score.spritefont","C:/Users/Jeffrey/Documents/MonoGame Games/NOTGalaga/NOTGalaga/Content/bin/DesktopGL/Content/Score.xnb","FontDescriptionProcessor","SpriteFontContent",2010,37905,0.3121656
+"C:/Users/Jeffrey/Documents/MonoGame Games/NOTGalaga/NOTGalaga/Content/Spaceship.png","C:/Users/Jeffrey/Documents/MonoGame Games/NOTGalaga/NOTGalaga/Content/bin/DesktopGL/Content/Spaceship.xnb","TextureProcessor","Texture2DContent",2430,147541,1.531392
