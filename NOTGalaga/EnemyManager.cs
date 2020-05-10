@@ -30,30 +30,16 @@ namespace NOTGalaga
 
         public void Update(GameTime gameTime)
         {
-            //Update projectiles
-            /*
-            foreach (Enemy enemy in enemies)
-            {
-                foreach(Projectile projectile in projectileManager.friendlyProjectiles)
-                {
-                    if (enemy.destinationRectangle.Intersects(projectile.destinationRectangle))
-                    {
-                        enemy.health -= projectile.damage;
-                    }
-                }
-
-                enemy.Update(gameTime);
-
-                if(enemy.state == Enemy.enemyState.dead)
-                {
-                    
-                }
-            }*/
+            //So, maybe I want to have a place to run different scripts?
+            //Different plans for attacking/enemy formations? 
+            //These could be their own objects and files that include instructions and 
 
             //Go in reverse order so I don't interrupt the iteration
             for(var en = enemies.Count - 1; en >= 0; --en)
             {
+                
                 Enemy enemy = enemies[en];
+                enemy.moveTo(new Vector2(200, 500), 50);
                 //foreach (Projectile projectile in projectileManager.friendlyProjectiles)
                 for (var proj = projectileManager.friendlyProjectiles.Count - 1; proj >= 0; --proj)
                 {

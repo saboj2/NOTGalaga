@@ -20,11 +20,13 @@ namespace NOTGalaga
         private double msPerFrame;
         public Color color { get; set; }
 
-        //public Vector2 location;
-        //public Vector2 velocity;
+        public Vector2 destination; //This is where the entity is travelling to.
+        public Vector2 velocity;
+        public float speed;
         public int health;
         public int points;
-        public Rectangle destinationRectangle;
+        public Rectangle destinationRectangle;  //This is where the sprite currently is
+        public Vector2 current_location;
         public enemyState state;
         public float angle;
 
@@ -45,8 +47,8 @@ namespace NOTGalaga
             msPerFrame = 250;
             color = Color.White;
 
-            this.angle = angle;
-            //this.location = location;
+            //this.angle = angle;
+            this.current_location = location;
             state = enemyState.alive;
             health = 100;
             points = 100;
@@ -84,6 +86,26 @@ namespace NOTGalaga
 
                 //destinationRectangle.X += (int)velocity.X;
                 //destinationRectangle.Y += (int)velocity.Y;
+
+                //Vector2 current_location = new Vector2(destinationRectangle.X, destinationRectangle.Y);
+                //if (!(current_location.Equals(destination)))
+                //Distance to next point is greater than the distance to the destination
+                if(Vector2.Distance(current_location, destination) > Vector2.Distance(current_location, current_location + velocity))
+                {
+                    //Vector2 new_location = Vector2.Lerp(current_location, destination, speed / Vector2.Distance(current_location, destination));
+                    //Vector2 new_location = Vector2.SmoothStep(current_location, destination, speed / Vector2.Distance(current_location, destination));
+                    //Vector2 new_location = Vector2.CatmullRom(current_location, destination, speed / Vector2.Distance(current_location, destination));
+
+                    current_location += velocity;
+
+                    //Converting to int is stopping the smooth transition from working. I need to keep track of the float in the background and only convert when moving the rectangle
+                    destinationRectangle.X = (int)current_location.X;
+                    destinationRectangle.Y = (int)current_location.Y;
+                }
+                else
+                {
+                    current_location = destination;
+                }
 
             }
             else
@@ -129,6 +151,17 @@ namespace NOTGalaga
             health -= damage;
             color = Color.OrangeRed;
             hitAnimationTime = 250f;
+        }
+
+        public void moveTo(Vector2 destination, /*Vector2 velocity*/ float speed)
+        {
+            //this.velocity = velocity;   //Do i want to know this? I feel like this could be a speed value and we calculate the vector based on the destination
+            //velocity = 
+            velocity = Vector2.Subtract(destination, current_location);
+            velocity.Normalize();
+            velocity = Vector2.Multiply(velocity, speed);
+            this.speed = speed;
+            this.destination = destination;
         }
 
     }
