@@ -1,0 +1,6 @@
+C:\Users\Jeffrey\Documents\MonoGame Games\NOTGalaga\XMLLevel\bin\Debug\netstandard2.0\XMLLevel.deps.json
+C:\Users\Jeffrey\Documents\MonoGame Games\NOTGalaga\XMLLevel\bin\Debug\netstandard2.0\XMLLevel.dll
+C:\Users\Jeffrey\Documents\MonoGame Games\NOTGalaga\XMLLevel\obj\Debug\netstandard2.0\XMLLevel.csprojAssemblyReference.cache
+C:\Users\Jeffrey\Documents\MonoGame Games\NOTGalaga\XMLLevel\obj\Debug\netstandard2.0\XMLLevel.AssemblyInfoInputs.cache
+C:\Users\Jeffrey\Documents\MonoGame Games\NOTGalaga\XMLLevel\obj\Debug\netstandard2.0\XMLLevel.AssemblyInfo.cs
+C:\Users\Jeffrey\Documents\MonoGame Games\NOTGalaga\XMLLevel\obj\Debug\netstandard2.0\XMLLevel.csproj.CoreCompileInputs.cache

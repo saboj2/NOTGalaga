@@ -21,3 +21,5 @@ C:\Users\Jeffrey\Documents\MonoGame Games\NOTGalaga\NOTGalaga\obj\Debug\NOTGalag
 C:\Users\Jeffrey\Documents\MonoGame Games\NOTGalaga\NOTGalaga\bin\DesktopGL\AnyCPU\Debug\Content\Projectile Laser.xnb
 C:\Users\Jeffrey\Documents\MonoGame Games\NOTGalaga\NOTGalaga\bin\DesktopGL\AnyCPU\Debug\Content\Enemy Shooter.xnb
 C:\Users\Jeffrey\Documents\MonoGame Games\NOTGalaga\NOTGalaga\bin\DesktopGL\AnyCPU\Debug\Content\Score.xnb
+C:\Users\Jeffrey\Documents\MonoGame Games\NOTGalaga\NOTGalaga\bin\DesktopGL\AnyCPU\Debug\Content\NOTGalagaLevels.xml
+C:\Users\Jeffrey\Documents\MonoGame Games\NOTGalaga\NOTGalaga\bin\DesktopGL\AnyCPU\Debug\Content\Xml\NOTGalagaLevels.xml

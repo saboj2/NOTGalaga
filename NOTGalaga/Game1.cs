@@ -1,7 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
+using System.Xml.Linq;
 
 namespace NOTGalaga
 {
@@ -14,6 +16,7 @@ namespace NOTGalaga
         SpriteBatch spriteBatch;
         ProjectileManager projectileManager;
         EnemyManager enemyManager;
+        LevelManager levelManager;
 
         int score;
         private SpriteFont score_font;
@@ -67,20 +70,37 @@ namespace NOTGalaga
             // TODO: use this.Content to load your game content here
             score_font = Content.Load<SpriteFont>("Score");
 
-
+            //Initialize Projectile Manager
             Dictionary<ProjectileManager.projectileType, Texture2D> projectileTextures = new Dictionary<ProjectileManager.projectileType, Texture2D>();
             projectileTextures.Add(ProjectileManager.projectileType.laser, Content.Load<Texture2D>("Projectile Laser"));
 
             projectileManager = new ProjectileManager(this, projectileTextures, graphics);
 
+            //Initialize Enemy Manager
             Dictionary<EnemyManager.enemyType, Texture2D> enemyTextures = new Dictionary<EnemyManager.enemyType, Texture2D>();
             enemyTextures.Add(EnemyManager.enemyType.shooter, Content.Load<Texture2D>("Enemy Shooter"));
 
             enemyManager = new EnemyManager(this, enemyTextures, projectileManager);
             enemyManager.CreateNewEnemy(EnemyManager.enemyType.shooter, new Vector2(100, 100));
 
+            //Initialize player
             Vector2 playerLocation = new Vector2(graphics.PreferredBackBufferWidth / 2, (float)(graphics.PreferredBackBufferHeight * 0.75));
             player = new Player(Content.Load<Texture2D>("Spaceship"), 1, 4, playerLocation, projectileManager);
+
+            //Level level = Content.Load<Level>("NOTGalagaLevels");
+
+            /*
+            XmlDocument level = new XmlDocument();
+            level.Load(".\\Content\\Xml\\NOTGalagaLevels.xml");
+            XmlNodeList list = level.GetElementsByTagName("waves");
+            Console.WriteLine(list.Count);
+            */
+
+            //Example of loading in levels. Ideally, we would want to do this 
+            XDocument levels_doc = XDocument.Load(".\\Content\\Xml\\NOTGalagaLevels.xml");
+
+            levelManager = new LevelManager(enemyManager);
+            levelManager.LoadLevels(levels_doc);
         }
 
         /// <summary>
@@ -111,6 +131,9 @@ namespace NOTGalaga
 
                 //Update Player
                 player.Update(keys, gameTime);
+
+                //Update the state of the level
+                levelManager.Update(gameTime);
 
                 //Update Enemies
                 enemyManager.Update(gameTime);

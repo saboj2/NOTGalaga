@@ -6,10 +6,12 @@
   <SourceFiles>
     <File>C:/Users/Jeffrey/Documents/MonoGame Games/NOTGalaga/NOTGalaga/Content/Enemy Shooter (2).png</File>
     <File>C:/Users/Jeffrey/Documents/MonoGame Games/NOTGalaga/NOTGalaga/Content/Projectile Laser.png</File>
+    <File>C:/Users/Jeffrey/Documents/MonoGame Games/NOTGalaga/NOTGalaga/Content/Score.spritefont</File>
     <File>C:/Users/Jeffrey/Documents/MonoGame Games/NOTGalaga/NOTGalaga/Content/Spaceship.png</File>
   </SourceFiles>
   <DestFiles>
     <File>Enemy Shooter.png</File>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
   </DestFiles>

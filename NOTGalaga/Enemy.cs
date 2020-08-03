@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework;
 
 namespace NOTGalaga
 {
-    class Enemy
+    public abstract class Enemy 
     {
         public Texture2D Texture { get; set; }
         public int Rows { get; set; }
@@ -18,21 +18,30 @@ namespace NOTGalaga
         private double animationTime;
         private double hitAnimationTime;
         private double msPerFrame;
+
         public Color color { get; set; }
 
         public Vector2 destination; //This is where the entity is travelling to.
         public Vector2 velocity;
-        public float speed;
-        public int health;
-        public int points;
+        //public float speed;
+        public int Health { get; set; }
+        //public int points; //This can be shared, each one doesn't need to keep track of this
+        public EnemyManager.enemyType Type { get; set; }
         public Rectangle destinationRectangle;  //This is where the sprite currently is
         public Vector2 current_location;
         public enemyState state;
-        public float angle;
+        public float Angle { get; set; }
+
+        protected double idleTimeLimit;
+        protected double idleTimer;
+        protected bool moved; //Is it ready to despawn and leave? This is kind of lame but it'll work
 
         public enum enemyState
         {
-            alive,
+            enter,
+            idle,
+            moving,
+            leave,
             dead
         }
 
@@ -49,11 +58,12 @@ namespace NOTGalaga
 
             //this.angle = angle;
             this.current_location = location;
-            state = enemyState.alive;
+            state = enemyState.enter;
             health = 100;
-            points = 100;
+            //points = 100;
 
-
+            idleTimeLimit = 7 * 1000;
+            
             destinationRectangle = new Rectangle((int)location.X, (int)location.Y, Texture.Width / Columns, Texture.Height / Rows);
 
         }
@@ -63,7 +73,7 @@ namespace NOTGalaga
             if (health > 0)
             {
 
-                
+                //Update Animation
                 animationTime += gameTime.ElapsedGameTime.TotalMilliseconds;
                 if (animationTime > msPerFrame)
                 {
@@ -84,27 +94,45 @@ namespace NOTGalaga
                 }
 
 
-                //destinationRectangle.X += (int)velocity.X;
-                //destinationRectangle.Y += (int)velocity.Y;
-
-                //Vector2 current_location = new Vector2(destinationRectangle.X, destinationRectangle.Y);
-                //if (!(current_location.Equals(destination)))
-                //Distance to next point is greater than the distance to the destination
-                if(Vector2.Distance(current_location, destination) > Vector2.Distance(current_location, current_location + velocity))
+                if(state == enemyState.idle)
                 {
-                    //Vector2 new_location = Vector2.Lerp(current_location, destination, speed / Vector2.Distance(current_location, destination));
-                    //Vector2 new_location = Vector2.SmoothStep(current_location, destination, speed / Vector2.Distance(current_location, destination));
-                    //Vector2 new_location = Vector2.CatmullRom(current_location, destination, speed / Vector2.Distance(current_location, destination));
-
-                    current_location += velocity;
-
-                    //Converting to int is stopping the smooth transition from working. I need to keep track of the float in the background and only convert when moving the rectangle
-                    destinationRectangle.X = (int)current_location.X;
-                    destinationRectangle.Y = (int)current_location.Y;
+                    if(idleTimer > 0) {
+                        idleTimer -= gameTime.ElapsedGameTime.TotalMilliseconds;
+                    }
+                    else
+                    {
+                        if(moved)
+                        {
+                            //move off screen and despawn
+                        }
+                        else
+                        {
+                            //Move forward a little bit.
+                            //I probably want this to be different for each enemy type.
+                            //a shooter could probably just move forward, maybe on a slight angle.
+                            //but a bomber could just shoot straight for the player and then die or something.
+                        }
+                    }
                 }
-                else
+
+                //Movement
+                if (state == enemyState.moving || state == enemyState.leave)
                 {
-                    current_location = destination;
+                    if (Vector2.Distance(current_location, destination) > Vector2.Distance(current_location, current_location + velocity)) //Distance to next point is greater than the distance to the destination
+                    {
+
+                        current_location += velocity;
+
+                        //Converting to int is stopping the smooth transition from working. I need to keep track of the float in the background and only convert when moving the rectangle
+                        destinationRectangle.X = (int)current_location.X;
+                        destinationRectangle.Y = (int)current_location.Y;
+                    }
+                    else
+                    {
+                        current_location = destination;
+                        state = (state == enemyState.leave) ? enemyState.dead : enemyState.idle;
+                        idleTimer = idleTimeLimit;
+                    }
                 }
 
             }
@@ -155,13 +183,13 @@ namespace NOTGalaga
 
         public void moveTo(Vector2 destination, /*Vector2 velocity*/ float speed)
         {
-            //this.velocity = velocity;   //Do i want to know this? I feel like this could be a speed value and we calculate the vector based on the destination
-            //velocity = 
+
             velocity = Vector2.Subtract(destination, current_location);
             velocity.Normalize();
             velocity = Vector2.Multiply(velocity, speed);
-            this.speed = speed;
+
             this.destination = destination;
+            state = (moved) ? enemyState.leave : enemyState.moving;
         }
 
     }

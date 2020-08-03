@@ -1,0 +1,23 @@
+{
+  "version": 2,
+  "dgSpecHash": "/HLOj1YmIYes0GoGGSr54RJuYHmmnQ8s7sZj4Bs88GbsTqsfE8YaSYWXgQXJpuqV+uImWLANdpMewCtjru1NLw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Jeffrey\\Documents\\MonoGame Games\\NOTGalaga\\XMLLevel\\XMLLevel.csproj",
+  "expectedPackageFiles": [
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Users\\Jeffrey\\.nuget\\packages\\monogame.framework.portable\\3.7.1.189\\monogame.framework.portable.3.7.1.189.nupkg.sha512",
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'MonoGame.Framework.Portable 3.7.1.189' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework '.NETStandard,Version=v2.0'. This package may not be fully compatible with your project.",
+      "libraryId": "MonoGame.Framework.Portable",
+      "targetGraphs": [
+        ".NETStandard,Version=v2.0"
+      ]
+    }
+  ]
+}
