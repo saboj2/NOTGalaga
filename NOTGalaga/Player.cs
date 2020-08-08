@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace NOTGalaga
 {
-    class Player
+    public class Player
     {
 
         ProjectileManager ProjectileManager { get; set; }
@@ -19,6 +19,7 @@ namespace NOTGalaga
         private int currentFrame;
         private int totalFrames;
 
+        public Rectangle destinationRectangle;
         public Vector2 location;
         public float speed;
         private int health;
@@ -41,21 +42,24 @@ namespace NOTGalaga
             //location = new Vector2(0, 0);
             this.location = location;
             cooldown = 0;
-           
+
+
+            destinationRectangle = new Rectangle((int)location.X, (int)location.Y, Texture.Width / Columns, Texture.Height / Rows);
+
         }
 
         public void Update(KeyboardState keys, GameTime gameTime)
         {
             //Detect Collisions
-            List<Projectile> projectiles = ProjectileManager.enemyProjectiles;
-            foreach (Projectile projectile in projectiles)
+            //List<Projectile> projectiles = ProjectileManager.enemyProjectiles;
+            for (var proj = ProjectileManager.enemyProjectiles.Count - 1; proj >= 0; --proj)
             {
-                /*
-                if(projectile.destinationRectangle.Intersects()
-                { 
-                
+                Projectile projectile = ProjectileManager.enemyProjectiles[proj];
+                if (destinationRectangle.Intersects(projectile.destinationRectangle))
+                {
+                    health -= projectile.damage;
+                    ProjectileManager.RemoveEnemyProjectile(projectile);
                 }
-                */
             }
 
             if (health > 0)
@@ -78,7 +82,11 @@ namespace NOTGalaga
                 if (keys.IsKeyDown(Keys.D)) {
                     location.X += speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 }
-                if(keys.IsKeyDown(Keys.Space))
+
+                destinationRectangle.X = (int)location.X;
+                destinationRectangle.Y = (int)location.Y;
+
+                if (keys.IsKeyDown(Keys.Space))
                 {
                     if (cooldown <= 0)
                     {

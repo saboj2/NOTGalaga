@@ -12,7 +12,7 @@ namespace NOTGalaga
     /// </summary>
     public class Game1 : Game
     {
-        GraphicsDeviceManager graphics;
+        public static GraphicsDeviceManager graphics { get; set; }
         SpriteBatch spriteBatch;
         ProjectileManager projectileManager;
         EnemyManager enemyManager;
@@ -36,7 +36,7 @@ namespace NOTGalaga
 
         }
 
-        Player player;
+        public static Player player { get; set; }
 
         /// <summary>
         /// Allows the game to perform any initialization it needs to before starting to run.
@@ -79,9 +79,7 @@ namespace NOTGalaga
             //Initialize Enemy Manager
             Dictionary<EnemyManager.enemyType, Texture2D> enemyTextures = new Dictionary<EnemyManager.enemyType, Texture2D>();
             enemyTextures.Add(EnemyManager.enemyType.shooter, Content.Load<Texture2D>("Enemy Shooter"));
-
             enemyManager = new EnemyManager(this, enemyTextures, projectileManager);
-            enemyManager.CreateNewEnemy(EnemyManager.enemyType.shooter, new Vector2(100, 100));
 
             //Initialize player
             Vector2 playerLocation = new Vector2(graphics.PreferredBackBufferWidth / 2, (float)(graphics.PreferredBackBufferHeight * 0.75));

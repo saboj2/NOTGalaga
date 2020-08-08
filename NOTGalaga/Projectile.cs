@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace NOTGalaga
 {
-    class Projectile
+    public class Projectile
     {
         public Texture2D Texture { get; set; }
         public int Rows { get; set; }
@@ -35,7 +35,7 @@ namespace NOTGalaga
             animationTime = 0f;
             msPerFrame = 250f;
 
-            this.angle = 0;
+            this.angle = angle;
             this.velocity = velocity;
             this.lifeTime = lifeTime;
             damage = 10;

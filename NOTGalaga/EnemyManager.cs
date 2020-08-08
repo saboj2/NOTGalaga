@@ -9,11 +9,10 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace NOTGalaga
 {
-    class EnemyManager
+    public class EnemyManager
     {
         Game1 game;
         List<Enemy> enemies;
-        int idleDirection;
         ProjectileManager projectileManager { get; set; }
         Dictionary<enemyType, Texture2D> textures;
 
@@ -29,7 +28,6 @@ namespace NOTGalaga
             this.textures = textures;
             this.projectileManager = projectileManager;
             enemies = new List<Enemy>();
-            idleDirection = 1;
         }
 
         public void Update(GameTime gameTime)
@@ -49,37 +47,23 @@ namespace NOTGalaga
                     }
                 }
 
-                //Know what, lets not do the idle stuff. Lets instead give them a timed pattern to follow
-                if (enemy.state == Enemy.enemyState.idle)
-                {
-                    //The enemy is going to be spawned at some initial location.
-                    //Then they will sit there for a few seconds, and then move to a new location.
-                    //Then they will sit there for a few seconds, and then will fly off screen.
-
-                    //I think I need some kind of state machine. And maybe the enemies themselves can deal with this
-                    //What happens when I want 
-                    if (enemy.idleTimer <= 0)
-                    {
-                        enemy.moveTo(enemy.current_location + new Vector2(0, 600), 2); 
-
-                        //After the enemies do this, we should move them off screen.
-                    }
-                }
-
-
-
                 enemy.Update(gameTime);
 
-                if (enemy.state == Enemy.enemyState.dead)
+                if (enemy.State == Enemy.enemyState.dead)
                 {
                     enemies.Remove(enemy);
-                    switch (enemy.type)
+                    
+                    //If it's dying because we killed it. Otherwise just remove and dont update score
+                    if (enemy.Health <= 0)
                     {
-                        case EnemyManager.enemyType.shooter:
-                            game.UpdateScore(100);
-                            break;
-                        default:
-                            break;
+                        switch (enemy.Type)
+                        {
+                            case EnemyManager.enemyType.shooter:
+                                game.UpdateScore(100);
+                                break;
+                            default:
+                                break;
+                        }
                     }
                 }
             }
@@ -105,7 +89,7 @@ namespace NOTGalaga
             {
                 case EnemyManager.enemyType.shooter:
                     //newEnemy = new Enemy(textures[type], 1, 4, location, (float)(Math.PI));
-                    newEnemy = new Enemy(textures[type], 1, 4, spawn_location, (float)(Math.PI));
+                    newEnemy = new EnemyShooter(textures[type], 1, 4, spawn_location, (float)(Math.PI));
                     enemies.Add(newEnemy);
                     break;
                 default:

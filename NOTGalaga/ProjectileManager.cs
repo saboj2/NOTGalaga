@@ -8,12 +8,12 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace NOTGalaga
 {
-    class ProjectileManager
+    public class ProjectileManager
     {
         Game1 game { get; set; }
         public List<Projectile> friendlyProjectiles { get; set; }
-        public List<Projectile> enemyProjectiles { get; set; }
-        Dictionary<projectileType, Texture2D> textures_;
+        static public List<Projectile> enemyProjectiles { get; set; }
+        static Dictionary<projectileType, Texture2D> textures_;
         GraphicsDeviceManager Graphics { get; set; }
 
         public enum projectileType
@@ -32,6 +32,8 @@ namespace NOTGalaga
 
         public void Update(GameTime gameTime)
         {
+
+            //Also, maybe we want to use a backward iterative approach like we use with the enemies
             //Update each projectile
             for(int i = 0; i < friendlyProjectiles.Count; ++i)
             {
@@ -47,11 +49,29 @@ namespace NOTGalaga
                 }
             }
 
+            //Now enemy projectiles
+            for (int i = 0; i < enemyProjectiles.Count; ++i)
+            {
+                enemyProjectiles[i].Update(gameTime);
+
+                //This works but it is a little questionable
+                bool outOfBounds = enemyProjectiles[i].destinationRectangle.Y < 0 || enemyProjectiles[i].destinationRectangle.X < 0 || enemyProjectiles[i].destinationRectangle.Y > Graphics.PreferredBackBufferHeight || enemyProjectiles[i].destinationRectangle.X > Graphics.PreferredBackBufferWidth;
+
+                if (enemyProjectiles[i].lifeTime <= 0 || outOfBounds)
+                {
+                    enemyProjectiles.RemoveAt(i);
+                    i--;
+                }
+            }
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
             foreach(Projectile projectile in friendlyProjectiles)
+            {
+                projectile.Draw(spriteBatch);
+            }
+            foreach(Projectile projectile in enemyProjectiles)
             {
                 projectile.Draw(spriteBatch);
             }
@@ -77,14 +97,24 @@ namespace NOTGalaga
             friendlyProjectiles.Remove(projectile);
         }
 
-        public void CreateEnemyProjectile(projectileType type, Vector2 location, double lifetime)
+        static public void CreateEnemyProjectile(projectileType type, Vector2 location, Vector2 velocity, double lifetime)
         {
-
+            float angle = (float)(Math.Atan2(velocity.Y, velocity.X) + (Math.PI / 2)); //The axis is shifted 90 degrees for the sprite batches
+            switch (type)
+            {
+                case projectileType.laser:
+                    Projectile newProjectile = new Projectile(textures_[type], 2, 1, location, velocity, angle, lifetime);
+                    //Projectile newProjectile = new Projectile(textures_[type], 1, 2, location, velocity, 0f, lifetime);
+                    enemyProjectiles.Add(newProjectile);
+                    break;
+                default:
+                    break;
+            }
         }
 
-        public void RemoveEnemyProjectile()
+        public void RemoveEnemyProjectile(Projectile projectile)
         {
-
+            enemyProjectiles.Remove(projectile);
         }
     }
 }

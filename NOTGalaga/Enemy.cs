@@ -29,7 +29,7 @@ namespace NOTGalaga
         public EnemyManager.enemyType Type { get; set; }
         public Rectangle destinationRectangle;  //This is where the sprite currently is
         public Vector2 current_location;
-        public enemyState state;
+        public enemyState State { get; set; }
         public float Angle { get; set; }
 
         protected double idleTimeLimit;
@@ -38,16 +38,26 @@ namespace NOTGalaga
 
         public enum enemyState
         {
-            enter,
+            //enter,
             idle,
             moving,
-            leave,
+            //leave,
             dead
         }
 
-
-        public Enemy (Texture2D texture, int rows, int columns, Vector2 location, float angle)
+        public Enemy ()
         {
+            Texture = null;
+            Rows = 0;
+            Columns = 0;
+            totalFrames = 0;
+            State = enemyState.dead;
+        }
+
+
+        public Enemy(/*EnemyManager.enemyType type,*/ Texture2D texture, int rows, int columns, Vector2 location, float angle)
+        {
+            //Type = type;
             Texture = texture;
             Rows = rows;
             Columns = columns;
@@ -56,21 +66,16 @@ namespace NOTGalaga
             msPerFrame = 250;
             color = Color.White;
 
-            //this.angle = angle;
+            Angle = angle;
             this.current_location = location;
-            state = enemyState.enter;
-            health = 100;
-            //points = 100;
+            State = enemyState.idle;
 
-            idleTimeLimit = 7 * 1000;
-            
             destinationRectangle = new Rectangle((int)location.X, (int)location.Y, Texture.Width / Columns, Texture.Height / Rows);
-
         }
 
         public void Update (GameTime gameTime)
         {
-            if (health > 0)
+            if (Health > 0)
             {
 
                 //Update Animation
@@ -93,30 +98,14 @@ namespace NOTGalaga
                     }
                 }
 
+                //Call class specific pathing logic
+                UpdateMovement(gameTime);
 
-                if(state == enemyState.idle)
-                {
-                    if(idleTimer > 0) {
-                        idleTimer -= gameTime.ElapsedGameTime.TotalMilliseconds;
-                    }
-                    else
-                    {
-                        if(moved)
-                        {
-                            //move off screen and despawn
-                        }
-                        else
-                        {
-                            //Move forward a little bit.
-                            //I probably want this to be different for each enemy type.
-                            //a shooter could probably just move forward, maybe on a slight angle.
-                            //but a bomber could just shoot straight for the player and then die or something.
-                        }
-                    }
-                }
+                //Call class specific attacking logic
+                UpdateAttack(gameTime);
 
                 //Movement
-                if (state == enemyState.moving || state == enemyState.leave)
+                if (State == enemyState.moving)
                 {
                     if (Vector2.Distance(current_location, destination) > Vector2.Distance(current_location, current_location + velocity)) //Distance to next point is greater than the distance to the destination
                     {
@@ -130,8 +119,8 @@ namespace NOTGalaga
                     else
                     {
                         current_location = destination;
-                        state = (state == enemyState.leave) ? enemyState.dead : enemyState.idle;
-                        idleTimer = idleTimeLimit;
+                        State = enemyState.idle;
+                        //idleTimer = idleTimeLimit;
                     }
                 }
 
@@ -147,7 +136,7 @@ namespace NOTGalaga
                     if(currentFrame == totalFrames)
                     {
                         currentFrame = 1;
-                        state = enemyState.dead;
+                        State = enemyState.dead;
                     }
                     else
                     {
@@ -169,19 +158,20 @@ namespace NOTGalaga
 
             spriteBatch.Begin();
 
-            spriteBatch.Draw(Texture, destinationRectangle, sourceRectangle, color, angle, origin, SpriteEffects.None, 0f);
+            spriteBatch.Draw(Texture, destinationRectangle, sourceRectangle, color, Angle, origin, SpriteEffects.None, 0f);
 
             spriteBatch.End();
         }
 
         public void wasHit(int damage)
         {
-            health -= damage;
+            Health -= damage;
             color = Color.OrangeRed;
             hitAnimationTime = 250f;
         }
 
-        public void moveTo(Vector2 destination, /*Vector2 velocity*/ float speed)
+        //We can override this if we want to add some different movement gic
+        public virtual void moveTo(Vector2 destination, /*Vector2 velocity*/ float speed)
         {
 
             velocity = Vector2.Subtract(destination, current_location);
@@ -189,8 +179,14 @@ namespace NOTGalaga
             velocity = Vector2.Multiply(velocity, speed);
 
             this.destination = destination;
-            state = (moved) ? enemyState.leave : enemyState.moving;
+            //State = (moved) ? enemyState.leave : enemyState.moving;
+            State = enemyState.moving;
         }
+
+        //Subclasses will have to implement their own movement and attacking logic
+        public abstract void UpdateMovement(GameTime gameTime);
+
+        public abstract void UpdateAttack(GameTime gameTime);
 
     }
 }
